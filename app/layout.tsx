@@ -32,7 +32,7 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="system">
           <NavBar/>
-          <main className="flex-grow pt-16">
+          <main className="flex-grow py-16">
             {children}
           </main>
           <Footer/>
