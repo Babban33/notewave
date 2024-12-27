@@ -4,8 +4,8 @@ export default function Home() {
   return (
     <div className="bg-background text-foreground">
       <HeroSection/>
-      <CallAction/>
       <FeatureSection/>
+      <CallAction/>
     </div>
   );
 }
