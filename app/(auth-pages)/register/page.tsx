@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
-import LoginComponent from "./component";
+import RegisterComponent from "./component";
 
 export default async function RegisterPage(){
     const supabase =await createClient();
@@ -10,5 +10,5 @@ export default async function RegisterPage(){
     //     const email = data.user.email; // Extract the user's email
     //     return <div>Welcome, <strong>{email}</strong>!</div>;
     // }
-    return <LoginComponent/>
+    return <RegisterComponent/>
 }
