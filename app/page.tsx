@@ -1,4 +1,5 @@
 import HeroSection, { CallAction, FeatureSection } from "./components/HeroSection";
+import { TempSection } from "./components/TempSection";
 
 export default function Home() {
   return (
@@ -6,6 +7,7 @@ export default function Home() {
       <HeroSection/>
       <FeatureSection/>
       <CallAction/>
+      <TempSection/>
     </div>
   );
 }
