@@ -21,11 +21,11 @@ export default function Home() {
             </p>
 
             <div className="flex flex-col gap-2 w-full max-w-md text-center">
-                <Button size="lg" className="w-full h-14 text-lg rounded-xl">
-                GET STARTED
+                <Button size="lg" className="w-full h-14 text-lg rounded-xl text-foreground">
+                    GET STARTED
                 </Button>
                 <p className="text-zinc-600 dark:text-zinc-400">
-                Already have an account?
+                    Already have an account?
                 </p>
             </div>
         </div>
