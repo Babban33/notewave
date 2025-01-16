@@ -1,6 +1,7 @@
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import * as z from "zod";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const formSchema = z.object({
     username: z
         .string()
