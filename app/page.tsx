@@ -43,10 +43,12 @@ function HeroSection() {
 function CTASection(){
     return(
         <section className="w-full text-center py-12 md:py-24 lg:py-32 bg-primary dark:bg-primary-foreground">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-primary-foreground dark:text-primary">Ready to Revolutionize Your Note-Taking?</h2>
-            <p className="mx-auto max-w-[700px] md:text-xl text-primary-foreground/80 dark:text-primary/80">
-                Join thousands of users who are already boosting their productivity with Notwave. Start your journey today!
-            </p>
+            <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-primary-foreground dark:text-primary">Ready to Revolutionize Your Note-Taking?</h2>
+                <p className="mx-auto max-w-[700px] md:text-xl text-primary-foreground/80 dark:text-primary/80">
+                    Join thousands of users who are already boosting their productivity with Notwave. Start your journey today!
+                </p>
+            </div>
         </section>
     )
 }
