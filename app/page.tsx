@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Feather } from "lucide-react";
+import { BookOpen, Feather } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 export default function Home() {
@@ -75,6 +75,17 @@ function FeatureSection(){
                 </CardHeader>
                 <CardContent>
                     <p className="text-muted-foreground">Create and edit notes with our user-friendly interface. It&apos;s as easy as thinking!</p>
+                </CardContent>
+            </Card>
+            <Card className="flex flex-col items-center text-center">
+                <CardHeader className="flex flex-col items-center">
+                    <div className="mb-4 p-2 bg-secondary rounded-full">
+                        <BookOpen className="h-6 w-6 text-primary" />
+                    </div>
+                    <CardTitle className="text-xl">Smart Organization</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-muted-foreground">Categorize and tag your notes for quick and easy retrieval. Finding your ideas has never been simpler.</p>
                 </CardContent>
             </Card>
         </section>
