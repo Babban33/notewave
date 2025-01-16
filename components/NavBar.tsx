@@ -1,19 +1,17 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet"
 import { MoonIcon, SunIcon, MenuIcon } from 'lucide-react'
 import { useTheme } from "next-themes"
 
 const navItems = [
-    { name: "Login", path: "/login", type: "default"},
-    { name: "Register", path:"/register", type: "outline"}
+    { name: "Login", path: "/login", type: "ghost"},
+    { name: "Register", path:"/register", type: "default"}
 ]
 
 export default function Navbar() {
-    const pathname = usePathname()
     const { theme, setTheme } = useTheme()
 
     return (
@@ -22,17 +20,18 @@ export default function Navbar() {
                 <div className="flex h-16 items-center justify-between">
                     <div className="flex items-center">
                         <Link href="/" className="flex items-center space-x-2">
-                        <span className="font-bold text-xl">Notewave</span>
+                        <span className="font-bold text-xl">📝 Notewave</span>
                         </Link>
                     </div>
                     <div className="flex items-center space-x-4">
                         <div className="hidden sm:flex space-x-4">
-                            <Link href="/login">
-                                <Button>Login</Button>
-                            </Link>
-                            <Link href="/register">
-                                <Button variant="ghost">Register</Button>
-                            </Link>
+                            {navItems.map((item)=>(
+                                <Link key={item.name} href={item.path}>
+                                    <Button variant={item.type as "default" | "outline" | "link" | "destructive" | "secondary" | "ghost"}>
+                                        {item.name}
+                                    </Button>
+                                </Link>
+                            ))}
                         </div>
                         <Button
                             variant="ghost"
@@ -48,25 +47,22 @@ export default function Navbar() {
                         <Sheet>
                             <SheetTrigger asChild>
                                 <Button variant="ghost" size="icon" className="sm:hidden rounded-full">
-                                <MenuIcon className="h-5 w-5" />
-                                <span className="sr-only">Toggle menu</span>
+                                    <MenuIcon className="h-5 w-5" />
+                                    <span className="sr-only">Toggle menu</span>
                                 </Button>
                             </SheetTrigger>
                             <SheetContent side="right">
                                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                                 <SheetDescription>Notewave</SheetDescription>
-                                <nav className="flex flex-col mt-4 w-full">
+                                <nav className="flex flex-col mt-4 space-y-4">
                                     {navItems.map((item) => (
-                                        <Link
-                                        key={item.path}
-                                        href={item.path}
-                                        className={`px-3 w-full py-2 rounded-md text-sm font-medium transition-colors ${
-                                            pathname === item.path
-                                            ? "bg-primary/10 text-primary"
-                                            : "text-foreground/60 hover:text-foreground hover:bg-accent"
-                                        }`}
-                                        >
-                                        {item.name}
+                                        <Link key={item.path} href={item.path} className="w-full">
+                                            <Button
+                                                variant={item.type as "default" | "outline" | "link" | "destructive" | "secondary" | "ghost"}
+                                                className="w-full py-2 text-center"
+                                            >
+                                                {item.name}
+                                            </Button>
                                         </Link>
                                     ))}
                                 </nav>
