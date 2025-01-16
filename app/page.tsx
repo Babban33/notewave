@@ -65,29 +65,33 @@ function CTASection(){
 function FeatureSection(){
     return(
         <section className="w-full py-12 md:py-24 lg:py-32">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-12">Features that Empower You</h2>
-            <Card className="flex flex-col items-center text-center">
-                <CardHeader className="flex flex-col items-center">
-                    <div className="mb-4 p-2 bg-secondary rounded-full">
-                        <Feather className="h-6 w-6 text-primary" />
-                    </div>
-                    <CardTitle className="text-xl">Intuitive Note-Taking</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <p className="text-muted-foreground">Create and edit notes with our user-friendly interface. It&apos;s as easy as thinking!</p>
-                </CardContent>
-            </Card>
-            <Card className="flex flex-col items-center text-center">
-                <CardHeader className="flex flex-col items-center">
-                    <div className="mb-4 p-2 bg-secondary rounded-full">
-                        <BookOpen className="h-6 w-6 text-primary" />
-                    </div>
-                    <CardTitle className="text-xl">Smart Organization</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <p className="text-muted-foreground">Categorize and tag your notes for quick and easy retrieval. Finding your ideas has never been simpler.</p>
-                </CardContent>
-            </Card>
+            <div className="container px-4 md:px-6">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-12">Features that Empower You</h2>
+                <div className="flex gap-4 justify-between">
+                    <Card className="flex flex-col items-center text-center w-1/2">
+                        <CardHeader className="flex flex-col items-center">
+                            <div className="mb-4 p-2 bg-secondary rounded-full">
+                                <Feather className="h-6 w-6 text-primary" />
+                            </div>
+                            <CardTitle className="text-xl">Intuitive Note-Taking</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-muted-foreground">Create and edit notes with our user-friendly interface. It&apos;s as easy as thinking!</p>
+                        </CardContent>
+                    </Card>
+                    <Card className="flex flex-col items-center text-center w-1/2">
+                        <CardHeader className="flex flex-col items-center">
+                            <div className="mb-4 p-2 bg-secondary rounded-full">
+                                <BookOpen className="h-6 w-6 text-primary" />
+                            </div>
+                            <CardTitle className="text-xl">Smart Organization</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-muted-foreground">Categorize and tag your notes for quick and easy retrieval. Finding your ideas has never been simpler.</p>
+                        </CardContent>
+                    </Card>
+                </div>
+            </div>
         </section>
     )
 }
