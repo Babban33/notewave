@@ -1,5 +1,8 @@
 import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Feather } from "lucide-react";
 import Link from "next/link";
+import React from "react";
 export default function Home() {
     return (
         <div className="flex flex-col items-center justify-center">
@@ -63,6 +66,17 @@ function FeatureSection(){
     return(
         <section className="w-full py-12 md:py-24 lg:py-32">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-12">Features that Empower You</h2>
+            <Card className="flex flex-col items-center text-center">
+                <CardHeader className="flex flex-col items-center">
+                    <div className="mb-4 p-2 bg-secondary rounded-full">
+                        <Feather className="h-6 w-6 text-primary" />
+                    </div>
+                    <CardTitle className="text-xl">Intuitive Note-Taking</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-muted-foreground">Create and edit notes with our user-friendly interface. It&apos;s as easy as thinking!</p>
+                </CardContent>
+            </Card>
         </section>
     )
 }
