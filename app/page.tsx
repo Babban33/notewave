@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { BookOpen, Feather } from "lucide-react";
+import { BookOpen, Feather, FolderSync } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 export default function Home() {
@@ -62,13 +62,13 @@ function CTASection(){
     )
 }
 
-function FeatureSection(){
-    return(
-        <section className="w-full py-12 md:py-24 lg:py-32 max-w-screen-xl">
-            <div className="container px-4 md:px-6">
+function FeatureSection() {
+    return (
+        <section className="w-full py-12 md:py-24 lg:py-32 max-w-screen-xl mx-auto">
+            <div className="px-4 md:px-6">
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-12">Features that Empower You</h2>
-                <div className="flex gap-4 justify-between">
-                    <Card className="flex flex-col items-center text-center w-1/2">
+                <div className="flex flex-col md:flex-row gap-4 justify-between">
+                    <Card className="flex flex-col items-center text-center w-full md:w-1/3">
                         <CardHeader className="flex flex-col items-center">
                             <div className="mb-4 p-2 bg-secondary rounded-full">
                                 <Feather className="h-6 w-6 text-primary" />
@@ -79,7 +79,7 @@ function FeatureSection(){
                             <p className="text-muted-foreground">Create and edit notes with our user-friendly interface. It&apos;s as easy as thinking!</p>
                         </CardContent>
                     </Card>
-                    <Card className="flex flex-col items-center text-center w-1/2">
+                    <Card className="flex flex-col items-center text-center w-full md:w-1/3">
                         <CardHeader className="flex flex-col items-center">
                             <div className="mb-4 p-2 bg-secondary rounded-full">
                                 <BookOpen className="h-6 w-6 text-primary" />
@@ -90,8 +90,19 @@ function FeatureSection(){
                             <p className="text-muted-foreground">Categorize and tag your notes for quick and easy retrieval. Finding your ideas has never been simpler.</p>
                         </CardContent>
                     </Card>
+                    <Card className="flex flex-col items-center text-center w-full md:w-1/3">
+                        <CardHeader className="flex flex-col items-center">
+                            <div className="mb-4 p-2 bg-secondary rounded-full">
+                                <FolderSync className="h-6 w-6 text-primary" />
+                            </div>
+                            <CardTitle className="text-xl">Seamless Sync</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-muted-foreground">Access your notes from anywhere, on any device. Your thoughts are always with you.</p>
+                        </CardContent>
+                    </Card>
                 </div>
             </div>
         </section>
-    )
+    );
 }
