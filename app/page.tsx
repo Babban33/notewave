@@ -4,6 +4,7 @@ export default function Home() {
     return (
         <div className="flex flex-col items-center justify-center">
             <HeroSection/>
+            <FeatureSection/>
             <CTASection/>
         </div>
     );
@@ -54,6 +55,14 @@ function CTASection(){
                     <Link href="/register">Register Now 🚀</Link>
                 </Button>
             </div>
+        </section>
+    )
+}
+
+function FeatureSection(){
+    return(
+        <section className="w-full py-12 md:py-24 lg:py-32">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-12">Features that Empower You</h2>
         </section>
     )
 }
