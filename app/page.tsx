@@ -28,7 +28,7 @@ function HeroSection() {
                                 Get Started 🎉
                             </Button>
                         </Link>
-                        <Link href="/learn-more">
+                        <Link href="/">
                             <Button size="lg" variant="outline" className="w-full sm:w-auto">
                                 Learn More 🧠
                             </Button>
