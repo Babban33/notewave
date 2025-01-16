@@ -23,7 +23,7 @@ function HeroSection() {
                         </p>
                     </div>
                     <div className="flex flex-col sm:flex-row sm:space-x-4 sm:space-y-0 space-y-4">
-                        <Link href="/signup">
+                        <Link href="/register">
                             <Button size="lg" className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90">
                                 Get Started 🎉
                             </Button>
@@ -49,6 +49,9 @@ function CTASection(){
                     Join thousands of users who are already boosting their productivity with Notwave. Start your journey today!
                 </p>
             </div>
+            <Button size="lg" className="bg-background text-primary hover:bg-background/90 dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90">
+                <Link href="/register">Register Now 🚀</Link>
+            </Button>
         </section>
     )
 }
