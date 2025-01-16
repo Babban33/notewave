@@ -4,6 +4,7 @@ export default function Home() {
     return (
         <div className="flex flex-col items-center justify-center">
             <HeroSection/>
+            <CTASection/>
         </div>
     );
 }
@@ -37,4 +38,12 @@ function HeroSection() {
             </div>
         </section>
     );
+}
+
+function CTASection(){
+    return(
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-primary dark:bg-primary-foreground">
+            <h2 className="text-3xl text-center font-bold tracking-tighter sm:text-5xl text-primary-foreground dark:text-primary">Ready to Revolutionize Your Note-Taking?</h2>
+        </section>
+    )
 }
