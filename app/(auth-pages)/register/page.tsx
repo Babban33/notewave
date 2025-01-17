@@ -1,5 +1,10 @@
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+'use client'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
+import {zodResolver} from "@hookform/resolvers/zod";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const formSchema = z.object({
@@ -36,6 +41,20 @@ const formSchema = z.object({
 });
 
 export default function RegisterPage(){
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            username: "",
+            email: "",
+            password: "",
+            confirmPassword: ""
+        }
+    })
+
+    const onSubmit = (data: { username: string; email: string; password: string }) => {
+        console.log('Form Submitted:', data);
+    };
+
     return(
         <div className="flex items-center justify-center min-h-screen">
             <Card>
@@ -43,6 +62,23 @@ export default function RegisterPage(){
                     <CardTitle>Register</CardTitle>
                     <CardDescription>Create a new account</CardDescription>
                 </CardHeader>
+                <CardContent>
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)}>
+                            <FormField
+                                name="username"
+                                render={({field})=>(
+                                    <FormItem>
+                                        <FormLabel>Username</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="John Doe" {...field}/>
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+                        </form>
+                    </Form>
+                </CardContent>
             </Card>
         </div>
     )
