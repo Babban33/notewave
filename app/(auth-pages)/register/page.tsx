@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { EyeOff, Eye } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { FaGoogle, FaMicrosoft, FaGithub } from 'react-icons/fa';
 
 const formSchema = z.object({
     username: z
@@ -68,6 +69,17 @@ export default function RegisterPage(){
                     <CardDescription>Create a new account</CardDescription>
                 </CardHeader>
                 <CardContent>
+                    <div className="mb-6 gap-4 grid grid-cols-3">
+                        <Button variant="outline">
+                            <FaGoogle/>
+                        </Button>
+                        <Button variant="outline">
+                            <FaMicrosoft/>
+                        </Button>
+                        <Button variant="outline">
+                            <FaGithub/>
+                        </Button>
+                    </div>
                     <div className="relative mb-6">
                         <Separator />
                         <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
