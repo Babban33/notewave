@@ -5,6 +5,7 @@ import * as z from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { User } from "lucide-react";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const formSchema = z.object({
@@ -69,7 +70,11 @@ export default function RegisterPage(){
                                 name="username"
                                 render={({field})=>(
                                     <FormItem>
-                                        <FormLabel>Username</FormLabel>
+                                        <FormLabel>
+                                            <div className="flex items-center">
+                                                <User className="mr-2" size={20}/>
+                                                Username
+                                            </div></FormLabel>
                                         <FormControl>
                                             <Input placeholder="John Doe" {...field}/>
                                         </FormControl>
