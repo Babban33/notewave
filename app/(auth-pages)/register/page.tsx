@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { EyeOff, Eye } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 const formSchema = z.object({
     username: z
@@ -67,6 +68,12 @@ export default function RegisterPage(){
                     <CardDescription>Create a new account</CardDescription>
                 </CardHeader>
                 <CardContent>
+                    <div className="relative mb-6">
+                        <Separator />
+                        <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                        Or continue with
+                        </span>
+                    </div>
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                             <FormField
