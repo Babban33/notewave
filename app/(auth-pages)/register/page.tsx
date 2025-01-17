@@ -73,7 +73,7 @@ export default function RegisterPage(){
                                 name="username"
                                 render={({field})=>(
                                     <FormItem>
-                                        <FormLabel> Username </FormLabel>
+                                        <FormLabel className="text-primary"> Username </FormLabel>
                                         <FormControl>
                                             <Input placeholder="John Doe" {...field} autoComplete="name"/>
                                         </FormControl>
@@ -86,7 +86,7 @@ export default function RegisterPage(){
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Email</FormLabel>
+                                        <FormLabel className="text-primary">Email</FormLabel>
                                         <FormControl>
                                             <Input type="email" placeholder="john@example.com" {...field} autoComplete="email"/>
                                         </FormControl>
@@ -99,7 +99,7 @@ export default function RegisterPage(){
                                 name="password"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Password</FormLabel>
+                                        <FormLabel className="text-primary">Password</FormLabel>
                                         <FormControl>
                                             <div className="relative">
                                                 <Input 
