@@ -57,10 +57,10 @@ export default function RegisterPage(){
     };
 
     return(
-        <div className="flex items-center justify-center min-h-screen">
-            <Card>
+        <div className="flex items-center justify-center min-h-screen px-2 md:px-0">
+            <Card className="w-full max-w-lg shadow-lg">
                 <CardHeader className="text-center">
-                    <CardTitle>Register</CardTitle>
+                    <CardTitle className="text-xl font-semibold">Register</CardTitle>
                     <CardDescription>Create a new account</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -76,7 +76,7 @@ export default function RegisterPage(){
                                                 Username
                                             </div></FormLabel>
                                         <FormControl>
-                                            <Input placeholder="John Doe" {...field}/>
+                                            <Input placeholder="John Doe" {...field} autoComplete="name"/>
                                         </FormControl>
                                     </FormItem>
                                 )}
