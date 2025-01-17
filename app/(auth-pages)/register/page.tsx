@@ -106,6 +106,7 @@ export default function RegisterPage(){
                                                     type={showPassword ? "text" : "password"} 
                                                     placeholder="********" 
                                                     {...field} 
+                                                    autoComplete="new-password"
                                                 />
                                                 <Button
                                                     type="button"
@@ -124,6 +125,19 @@ export default function RegisterPage(){
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="confirmPassword"
+                                render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Confirm Password</FormLabel>
+                                    <FormControl>
+                                        <Input type="password" placeholder="********" {...field} autoComplete="on"/>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
                                 )}
                             />
                             <Button type="submit" className="w-full">Register</Button>
