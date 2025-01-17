@@ -33,31 +33,15 @@ export async function updateSession(request: NextRequest) {
 
     // IMPORTANT: DO NOT REMOVE auth.getUser()
 
-    const {
-        data: { user },
-    } = await supabase.auth.getUser()
+    const user = await supabase.auth.getUser();
 
-    // if (
-    //     !user &&
-    //     !request.nextUrl.pathname.startsWith('/login') &&
-    //     !request.nextUrl.pathname.startsWith('/auth')
-    // ) {
-    //     // no user, potentially respond by redirecting the user to the login page
-    //     const url = request.nextUrl.clone()
-    //     url.pathname = '/login'
-    //     return NextResponse.redirect(url)
-    // }
-    // Exclude specific paths from redirection when no user is found
-    const isUnauthenticated = !user;
-    const isPublicPath =
-        request.nextUrl.pathname === '/' || // Homepage
-        request.nextUrl.pathname.startsWith('/auth'); // Authentication-related paths
+    // protected routes
+    if (request.nextUrl.pathname.startsWith("/protected") && user.error) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
 
-    if (isUnauthenticated && !isPublicPath) {
-        // Redirect to the login page if the user is not authenticated
-        const url = request.nextUrl.clone();
-        url.pathname = '/login';
-        return NextResponse.redirect(url);
+    if (request.nextUrl.pathname === "/" && !user.error) {
+      return NextResponse.redirect(new URL("/protected", request.url));
     }
 
     return supabaseResponse
