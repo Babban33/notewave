@@ -5,9 +5,8 @@ import * as z from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { User } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const formSchema = z.object({
     username: z
         .string()
@@ -65,22 +64,31 @@ export default function RegisterPage(){
                 </CardHeader>
                 <CardContent>
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                             <FormField
                                 name="username"
                                 render={({field})=>(
                                     <FormItem>
-                                        <FormLabel>
-                                            <div className="flex items-center">
-                                                <User className="mr-2" size={20}/>
-                                                Username
-                                            </div></FormLabel>
+                                        <FormLabel> Username </FormLabel>
                                         <FormControl>
                                             <Input placeholder="John Doe" {...field} autoComplete="name"/>
                                         </FormControl>
                                     </FormItem>
                                 )}
                             />
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Email</FormLabel>
+                                        <FormControl>
+                                            <Input type="email" placeholder="john@example.com" {...field} autoComplete="email"/>
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+                            <Button type="submit" className="w-full">Register</Button>
                         </form>
                     </Form>
                 </CardContent>
