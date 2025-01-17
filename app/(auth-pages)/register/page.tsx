@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -51,8 +51,8 @@ export default function RegisterPage(){
         }
     })
 
-    const onSubmit = (data: { username: string; email: string; password: string }) => {
-        console.log('Form Submitted:', data);
+    const onSubmit = (values: z.infer<typeof formSchema>) => {
+        console.log('Form Submitted:', values);
     };
 
     return(
@@ -73,6 +73,7 @@ export default function RegisterPage(){
                                         <FormControl>
                                             <Input placeholder="John Doe" {...field} autoComplete="name"/>
                                         </FormControl>
+                                        <FormMessage/>
                                     </FormItem>
                                 )}
                             />
@@ -85,6 +86,7 @@ export default function RegisterPage(){
                                         <FormControl>
                                             <Input type="email" placeholder="john@example.com" {...field} autoComplete="email"/>
                                         </FormControl>
+                                        <FormMessage/>
                                     </FormItem>
                                 )}
                             />
