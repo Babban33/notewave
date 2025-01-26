@@ -50,6 +50,7 @@ export default function RegisterPage(){
     const [showPassword, setShowPassword] = useState(false)
     const [registrationSuccess, setRegistrationSuccess] = useState(false)
     const [registrationError, setRegistrationError] = useState<string | null>(null)
+    const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -63,15 +64,18 @@ export default function RegisterPage(){
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-          await new Promise((resolve) => setTimeout(resolve, 1000))
-          console.log("Form Submitted:", values)
-          setRegistrationSuccess(true)
-          setRegistrationError(null)
-          form.reset()
+            setIsLoading(true);
+            await new Promise((resolve) => setTimeout(resolve, 1000))
+            console.log("Form Submitted:", values)
+            setRegistrationSuccess(true)
+            setRegistrationError(null)
+            form.reset()
+            setIsLoading(false);
         } catch (error) {
-          console.error("Registration error:", error)
-          setRegistrationError("An error occurred during registration. Please try again.")
-          setRegistrationSuccess(false)
+            console.error("Registration error:", error)
+            setRegistrationError("An error occurred during registration. Please try again.")
+            setRegistrationSuccess(false)
+            setIsLoading(false)
         }
     }
 
@@ -226,7 +230,7 @@ export default function RegisterPage(){
                                     </FormItem>
                                     )}
                                 />
-                                <Button type="submit" className="w-full">Register</Button>
+                                <Button type="submit" className="w-full">{isLoading ? "Registering...": "Register"}</Button>
                             </form>
                         </Form>
                     </CardContent>
