@@ -94,12 +94,12 @@ export default function RegisterPage(){
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -50 }}
                             transition={{ duration: 0.3 }}
-                            className="fixed top-16 transform -translate-x-1/2 z-50 w-full max-w-md"
+                            className="fixed top-18 transform -translate-x-1/2 z-50 w-full max-w-md"
                         >
                             <Alert
                                 className={`relative shadow-md ${
                                 registrationSuccess
-                                    ? "bg-green-50 dark:bg-green-900 border-green-200 dark:border-green-800"
+                                    ? ""
                                     : "bg-destructive/15 dark:bg-destructive border-destructive/50 dark:border-destructive"
                                 }`}
                             >
@@ -107,14 +107,14 @@ export default function RegisterPage(){
                                     <X className="h-4 w-4" />
                                 </Button>
                                 {registrationSuccess ? (
-                                    <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
+                                    <CheckCircle2 className="h-5 w-5" />
                                     ) : (
                                     <AlertCircle className="h-5 w-5 text-destructive dark:text-destructive-foreground" />
                                 )}
                                 <AlertTitle
                                     className={`text-lg font-semibold ${
                                         registrationSuccess
-                                        ? "text-green-800 dark:text-green-200"
+                                        ? ""
                                         : "text-destructive dark:text-destructive-foreground"
                                     }`}
                                 >
@@ -123,7 +123,7 @@ export default function RegisterPage(){
                                 <AlertDescription
                                     className={`mt-1 text-sm ${
                                         registrationSuccess
-                                        ? "text-green-700 dark:text-green-300"
+                                        ? ""
                                         : "text-destructive dark:text-destructive-foreground"
                                     }`}
                                 >
