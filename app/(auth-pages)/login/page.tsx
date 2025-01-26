@@ -23,6 +23,7 @@ const formSchema = z.object({
 
 export default function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -32,8 +33,10 @@ export default function LoginPage() {
         },
     });
 
-    const onSubmit = (values: z.infer<typeof formSchema>) => {
-        console.log('Form Submitted:', values);
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        setIsLoading(true);
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        console.log("Form Submitted:", values)
     };
 
     return (
@@ -108,7 +111,7 @@ export default function LoginPage() {
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit" className="w-full">Login</Button>
+                            <Button type="submit" className="w-full">{isLoading? "Logging In...": "Log In"}</Button>
                         </form>
                     </Form>
                 </CardContent>
