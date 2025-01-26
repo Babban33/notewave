@@ -7,9 +7,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { EyeOff, Eye } from "lucide-react";
+import { EyeOff, Eye, CheckCircle2, AlertCircle } from "lucide-react";
 import { FaGoogle, FaMicrosoft, FaGithub } from 'react-icons/fa';
 import Link from "next/link";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const formSchema = z.object({
     username: z
@@ -46,6 +47,8 @@ const formSchema = z.object({
 
 export default function RegisterPage(){
     const [showPassword, setShowPassword] = useState(false)
+    const [registrationSuccess, setRegistrationSuccess] = useState(false)
+    const [registrationError, setRegistrationError] = useState<string | null>(null)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -57,9 +60,19 @@ export default function RegisterPage(){
         }
     })
 
-    const onSubmit = (values: z.infer<typeof formSchema>) => {
-        console.log('Form Submitted:', values);
-    };
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        try {
+          await new Promise((resolve) => setTimeout(resolve, 1000))
+          console.log("Form Submitted:", values)
+          setRegistrationSuccess(true)
+          setRegistrationError(null)
+          form.reset()
+        } catch (error) {
+          console.error("Registration error:", error)
+          setRegistrationError("An error occurred during registration. Please try again.")
+          setRegistrationSuccess(false)
+        }
+    }
 
     return(
         <div className="flex items-center justify-center min-h-screen px-2 md:px-0">
@@ -69,6 +82,22 @@ export default function RegisterPage(){
                     <CardDescription>Create a new account</CardDescription>
                 </CardHeader>
                 <CardContent>
+                    {registrationSuccess && (
+                        <Alert className="mb-4">
+                            <CheckCircle2 className="h-4 w-4" />
+                            <AlertTitle>Registration Successful!</AlertTitle>
+                            <AlertDescription>
+                                A confirmation email has been sent to your email address. Please check your inbox.
+                            </AlertDescription>
+                        </Alert>
+                        )}
+                        {registrationError && (
+                        <Alert variant="destructive" className="mb-4">
+                            <AlertCircle className="h-4 w-4" />
+                            <AlertTitle>Error</AlertTitle>
+                            <AlertDescription>{registrationError}</AlertDescription>
+                        </Alert>
+                    )}
                     <div className="mb-6 gap-4 grid grid-cols-3">
                         <Button variant="outline">
                             <FaGoogle/>
