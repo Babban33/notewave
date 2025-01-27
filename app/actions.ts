@@ -39,3 +39,18 @@ export const signout = async() =>{
         console.error(error);
     }
 }
+
+export const signInWithGithub = async () => {
+    const currentUrl = window.location.href;
+    const supabase = createClient();
+    {const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+        options: {
+            redirectTo: currentUrl,
+        }
+    })
+    if(error){
+        redirect(`/register`)
+    }
+    return data;}
+}
