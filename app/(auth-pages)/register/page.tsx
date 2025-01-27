@@ -13,6 +13,7 @@ import Link from "next/link";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {motion, AnimatePresence} from "framer-motion"
 import { register } from "@/app/actions";
+import { AuthError } from "@supabase/supabase-js";
 
 const formSchema = z.object({
     username: z
@@ -74,9 +75,13 @@ export default function RegisterPage(){
             setRegistrationSuccess(true);
             setRegistrationError(null);
             form.reset();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (error: any) {
-            setRegistrationError(error.message || "An error occurred during registration. Please try again.");
+        } catch (error: unknown) {
+            if(error instanceof AuthError){
+                setRegistrationError(error.message || "An error occurred during registration. Please try again.");
+            }
+            else{
+                setRegistrationError("An unknown error occurred");
+            }
             setRegistrationSuccess(false);
         } finally {
             setIsLoading(false);
