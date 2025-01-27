@@ -12,7 +12,7 @@ import { FaGoogle, FaMicrosoft, FaGithub } from 'react-icons/fa';
 import Link from "next/link";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {motion, AnimatePresence} from "framer-motion"
-import { register } from "@/app/actions";
+import { register, signInWithGithub } from "@/app/actions";
 import { AuthError } from "@supabase/supabase-js";
 
 const formSchema = z.object({
@@ -69,8 +69,7 @@ export default function RegisterPage(){
             setIsLoading(true);
             const { email, password, username } = values;
     
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const response = await register(username, email, password);
+            await register(username, email, password);
     
             setRegistrationSuccess(true);
             setRegistrationError(null);
@@ -157,7 +156,7 @@ export default function RegisterPage(){
                             <Button variant="outline">
                                 <FaMicrosoft/>
                             </Button>
-                            <Button variant="outline">
+                            <Button variant="outline" onClick={signInWithGithub}>
                                 <FaGithub/>
                             </Button>
                         </div>
