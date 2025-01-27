@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createClient } from "@/utils/supabase/client";
 import { AuthError } from '@supabase/supabase-js';
+import { error } from "console";
 import { redirect } from "next/navigation";
 
 export const register = async (username: string, email: string, password: string) => {
@@ -33,20 +35,19 @@ export const login = async(email: string, password: string)=>{
     try{
         const supabase = createClient();
         const {data, error} = await supabase.auth.signInWithPassword({
-            email: email,
-            password: password,
+            email,
+            password,
         })
         if(error){
-            console.error(error);
-            throw error;
+            return {error: error.message};
         }
-        return data;
+        return {success: "Login Successfull"};
     } catch (err: unknown){
         console.log(err);
         if (err instanceof AuthError){
-            throw new Error(err.message);
+            return {error: err.message};
         } else {
-            throw new Error('An unknown error occurred');
+            return {error: "An unknown error occurred "}
         }
     }
 }
@@ -65,7 +66,7 @@ export const signout = async() =>{
 export const signInWithGithub = async () => {
     const currentUrl = window.location.href;
     const supabase = createClient();
-    {const { data, error } = await supabase.auth.signInWithOAuth({
+    const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
             redirectTo: currentUrl,
@@ -74,5 +75,5 @@ export const signInWithGithub = async () => {
     if(error){
         redirect(`/register`)
     }
-    return data;}
+    return data;
 }
