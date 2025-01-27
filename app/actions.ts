@@ -1,5 +1,6 @@
 import { createClient } from "@/utils/supabase/client";
 import { AuthError } from '@supabase/supabase-js';
+import { redirect } from "next/navigation";
 
 export const register = async (username: string, email: string, password: string) => {
     const supabase = createClient();
@@ -27,3 +28,14 @@ export const register = async (username: string, email: string, password: string
         }
     }
 };
+
+export const signout = async() =>{
+    const supabase = createClient();
+    const { error } = await supabase.auth.signOut()
+    if(!error){
+        redirect('/login')
+    }
+    else{
+        console.error(error);
+    }
+}
