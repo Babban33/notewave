@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+"use server"
 import { createClient } from "@/utils/supabase/client";
 import { AuthError } from '@supabase/supabase-js';
-import { error } from "console";
+import { cookies } from "next/headers"
 import { redirect } from "next/navigation";
 
 export const register = async (username: string, email: string, password: string) => {
@@ -31,24 +31,22 @@ export const register = async (username: string, email: string, password: string
     }
 };
 
-export const login = async(email: string, password: string)=>{
+export async function login(email: string, password: string) {
     try{
         const supabase = createClient();
-        const {data, error} = await supabase.auth.signInWithPassword({
-            email,
-            password,
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password,
         })
         if(error){
             return {error: error.message};
+        } else if(data){
+            (await cookies()).set("session", JSON.stringify(data.session))
+            return { success: "Logged in successfully" }
         }
-        return {success: "Login Successfull"};
-    } catch (err: unknown){
-        console.log(err);
-        if (err instanceof AuthError){
-            return {error: err.message};
-        } else {
-            return {error: "An unknown error occurred "}
-        }
+    } catch(err){
+        console.error(err);
+        return{ error: "An unexpected error occurred"}
     }
 }
 
