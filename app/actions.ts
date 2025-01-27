@@ -29,6 +29,28 @@ export const register = async (username: string, email: string, password: string
     }
 };
 
+export const login = async(email: string, password: string)=>{
+    try{
+        const supabase = createClient();
+        const {data, error} = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password,
+        })
+        if(error){
+            console.error(error);
+            throw error;
+        }
+        return data;
+    } catch (err: unknown){
+        console.log(err);
+        if (err instanceof AuthError){
+            throw new Error(err.message);
+        } else {
+            throw new Error('An unknown error occurred');
+        }
+    }
+}
+
 export const signout = async() =>{
     const supabase = createClient();
     const { error } = await supabase.auth.signOut()
