@@ -60,10 +60,19 @@ export default function LoginPage(){
         try {
             setIsLoading(true);
             const { email, password} = values;
-            await login(email, password);
-            setRegistrationSuccess(true);
-            setRegistrationError(null);
-            form.reset();
+            console.log("Password: ",password, password.length);
+            const response = await login(email, password);
+            if(response.error){
+                setIsLoading(false);
+                setRegistrationError(response.error);
+                setRegistrationSuccess(false);
+            }
+            else if(response.success){
+                setIsLoading(false);
+                setRegistrationSuccess(true);
+                setRegistrationError(null);
+                form.reset();
+            }
         } catch (error: unknown) {
             if(error instanceof Error){
                 setRegistrationError(error.message || "An error occurred during registration. Please try again.");
