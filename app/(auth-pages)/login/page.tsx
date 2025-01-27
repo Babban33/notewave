@@ -42,7 +42,7 @@ export default function LoginPage(){
         setError(null);
         try {
             const result = await login(values.email, values.password)
-            if (result && result.error) {
+            if (result?.error) {
               setError(result.error)
             }
             if(result?.success){
