@@ -12,6 +12,7 @@ import { FaGoogle, FaMicrosoft, FaGithub } from 'react-icons/fa';
 import Link from "next/link";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {motion, AnimatePresence} from "framer-motion"
+import { register } from "@/app/actions";
 
 const formSchema = z.object({
     username: z
@@ -65,24 +66,27 @@ export default function RegisterPage(){
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             setIsLoading(true);
-            await new Promise((resolve) => setTimeout(resolve, 1000))
-            console.log("Form Submitted:", values)
-            setRegistrationSuccess(true)
-            setRegistrationError(null)
-            form.reset()
+            const { email, password, username } = values;
+    
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const response = await register(username, email, password);
+    
+            setRegistrationSuccess(true);
+            setRegistrationError(null);
+            form.reset();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            setRegistrationError(error.message || "An error occurred during registration. Please try again.");
+            setRegistrationSuccess(false);
+        } finally {
             setIsLoading(false);
-        } catch (error) {
-            console.error("Registration error:", error)
-            setRegistrationError("An error occurred during registration. Please try again.")
-            setRegistrationSuccess(false)
-            setIsLoading(false)
         }
-    }
+    };    
 
     const closeAlert = () => {
         setRegistrationSuccess(false)
         setRegistrationError(null)
-      }
+    }
 
     return(
         <div className="flex items-center justify-center min-h-screen px-2 md:px-0">
