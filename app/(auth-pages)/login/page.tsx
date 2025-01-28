@@ -3,12 +3,13 @@
 import { login } from "@/app/actions"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { AnimatePresence, motion } from "framer-motion"
-import { AlertCircle, CheckCircle2, X } from "lucide-react"
+import { AlertCircle, CheckCircle2, Eye, EyeOff, X } from "lucide-react"
+import Link from "next/link"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -28,7 +29,8 @@ const formSchema = z.object({
 export default function LoginPage(){
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver:zodResolver(formSchema),
         defaultValues: {
@@ -65,7 +67,7 @@ export default function LoginPage(){
 
     return(
         <div className="flex items-center justify-center min-h-screen px-2 md:px-0">
-            <div className="w-full max-w-md">
+            <div className="w-full max-w-sm">
             <AnimatePresence>
                     {(success || error) && (
                         <motion.div
@@ -73,28 +75,28 @@ export default function LoginPage(){
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -50 }}
                             transition={{ duration: 0.3 }}
-                            className="fixed top-18 transform -translate-x-1/2 z-50 w-full max-w-md"
+                            className="fixed top-18 transform -translate-x-1/2 z-50 w-full max-w-sm"
                         >
                             <Alert
                                 className={`relative shadow-md ${
                                 success
                                     ? ""
-                                    : "bg-destructive/15 dark:bg-destructive border-destructive/50 dark:border-destructive"
+                                    : "bg-destructive border-destructive"
                                 }`}
                             >
-                                <Button className="absolute right-2 top-2" variant="ghost" size="icon" onClick={closeAlert}>
+                                <Button className="absolute right-2 top-2 hover:bg-inherit" variant="ghost" size="icon" onClick={closeAlert}>
                                     <X className="h-4 w-4" />
                                 </Button>
                                 {success ? (
                                     <CheckCircle2 className="h-5 w-5" />
                                     ) : (
-                                    <AlertCircle className="h-5 w-5 text-destructive dark:text-destructive-foreground" />
+                                    <AlertCircle className="h-5 w-5 text-destructive-foreground" />
                                 )}
                                 <AlertTitle
                                     className={`text-lg font-semibold ${
                                         success
                                         ? ""
-                                        : "text-destructive dark:text-destructive-foreground"
+                                        : "text-destructive-foreground"
                                     }`}
                                 >
                                     {success ? "Registration Successful!" : "Registration Error"}
@@ -103,7 +105,7 @@ export default function LoginPage(){
                                     className={`mt-1 text-sm ${
                                         success
                                         ? ""
-                                        : "text-destructive dark:text-destructive-foreground"
+                                        : "text-destructive-foreground"
                                     }`}
                                 >
                                     {success
@@ -142,12 +144,27 @@ export default function LoginPage(){
                                         <FormItem>
                                             <FormLabel>Password</FormLabel>
                                             <FormControl>
-                                                <Input 
-                                                    type="password"
-                                                    placeholder="*******"
-                                                    {...field}
-                                                    autoComplete="current-password"
-                                                />
+                                                <div className="relative">
+                                                    <Input 
+                                                        type={showPassword ? "text": "password"}
+                                                        placeholder="*******"
+                                                        {...field}
+                                                        autoComplete="current-password"
+                                                    />
+                                                    <Button
+                                                        type="button"
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="absolute right-0 top-0 h-full px-3 py-2: hover:bg-transparent"
+                                                        onClick={()=> setShowPassword(!showPassword)}
+                                                    >
+                                                        {showPassword ? (
+                                                            <EyeOff className="h-4 w-4"/>
+                                                        ): (
+                                                            <Eye className="h-4 w-4"/>
+                                                        )}
+                                                    </Button>
+                                                </div>
                                             </FormControl>
                                             <FormMessage/>
                                         </FormItem>
@@ -159,11 +176,14 @@ export default function LoginPage(){
                             </form>
                         </Form>
                     </CardContent>
-                    {error && (
-                        <Alert variant="destructive" className="mt-4">
-                            <AlertDescription>{error}</AlertDescription>
-                        </Alert>
-                    )}
+                    <CardFooter className="justify-center">
+                        <div className="text-center text-sm">
+                            Don&apos;t have an account?{" "}
+                            <Link href="/register" className="underline underline-offset-4">
+                                Register
+                            </Link>
+                        </div>
+                    </CardFooter>
                 </Card>
             </div>
         </div>
