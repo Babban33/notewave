@@ -67,13 +67,15 @@ export default function RegisterPage(){
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             setIsLoading(true);
-            const { email, password, username } = values;
     
-            await register(username, email, password);
-    
-            setRegistrationSuccess(true);
-            setRegistrationError(null);
-            form.reset();
+            const response = await register(values.username, values.email, values.password);
+            if(response?.success){
+                setRegistrationSuccess(true);
+                setRegistrationError(null);
+                form.reset();
+            } else if(response?.error){
+                setRegistrationError(response.error);
+            }
         } catch (error: unknown) {
             if(error instanceof AuthError){
                 setRegistrationError(error.message || "An error occurred during registration. Please try again.");
