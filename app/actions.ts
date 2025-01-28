@@ -1,7 +1,5 @@
-"use server"
 import { createClient } from "@/utils/supabase/client";
 import { AuthError } from '@supabase/supabase-js';
-import { cookies } from "next/headers"
 import { redirect } from "next/navigation";
 
 export const register = async (username: string, email: string, password: string) => {
@@ -16,16 +14,17 @@ export const register = async (username: string, email: string, password: string
                 },
             },
         });
-
-        if (error) {
-            throw error;
+        if(error){
+            return {error: error.message};
+        }else if(data){
+            return {success: "Registration Successfull"};
         }
 
-        return data;
     } catch (err: unknown) {
         if (err instanceof AuthError) {
             throw new Error(err.message);
         } else {
+            console.error(err);
             throw new Error('An unknown error occurred');
         }
     }
@@ -41,7 +40,6 @@ export async function login(email: string, password: string) {
         if(error){
             return {error: error.message};
         } else if(data){
-            (await cookies()).set("session", JSON.stringify(data.session))
             return { success: "Logged in successfully" }
         }
     } catch(err){
