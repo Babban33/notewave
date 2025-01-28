@@ -73,3 +73,21 @@ export const signInWithGithub = async () => {
     }
     return data;
 }
+
+export const resendEmail = async( email: string ) => {
+    try{
+        console.log("Inside server")
+        const supabase = createClient();
+        const { error } = await supabase.auth.resend({
+            type: 'signup',
+            email: email,
+        })
+        if(error){
+            return{error: error.message}
+        }
+        return {success: "Successfull"};
+    } catch(err){
+        console.error(err);
+        throw new Error("Server Error");
+    }
+}

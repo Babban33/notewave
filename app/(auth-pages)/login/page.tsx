@@ -1,6 +1,6 @@
 "use client"
 
-import { login } from "@/app/actions"
+import { login, resendEmail } from "@/app/actions"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -31,6 +31,7 @@ export default function LoginPage(){
     const [success, setSuccess] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [isNotEmailConfirmed, setIsNotEmailConfirmed] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver:zodResolver(formSchema),
         defaultValues: {
@@ -45,7 +46,10 @@ export default function LoginPage(){
         try {
             const result = await login(values.email, values.password)
             if (result?.error) {
-              setError(result.error)
+                if(result.error === "Email not confirmed"){
+                    setIsNotEmailConfirmed(true);
+                }
+                setError(result.error)
             }
             if(result?.success){
                 setSuccess(true);
@@ -57,6 +61,21 @@ export default function LoginPage(){
             setError("An unexpected error occurred. Please try again.")
           } finally {
             setIsLoading(false)
+        }
+    }
+
+    async function resendConfirmation(values: z.infer<typeof formSchema>) {
+        try{
+            console.log("started in component");
+            const result = await resendEmail(values.email);
+            if(result?.success){
+                setSuccess(true);
+                setError(null);
+            } else if(result?.error){
+                console.error(error);
+            }
+        } catch(err){
+            console.error(err);
         }
     }
 
@@ -75,7 +94,7 @@ export default function LoginPage(){
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -50 }}
                             transition={{ duration: 0.3 }}
-                            className="fixed top-18 transform -translate-x-1/2 z-50 w-full max-w-sm"
+                            className="relative top-18 transform -translate-x-1/2 z-50 w-full max-w-sm"
                         >
                             <Alert
                                 className={`relative shadow-md ${
@@ -99,7 +118,7 @@ export default function LoginPage(){
                                         : "text-destructive-foreground"
                                     }`}
                                 >
-                                    {success ? "Registration Successful!" : "Registration Error"}
+                                    {success ? "Registration Successful!" : (isNotEmailConfirmed ? "Email Not Confirmed": "Registration Error")}
                                 </AlertTitle>
                                 <AlertDescription
                                     className={`mt-1 text-sm ${
@@ -110,7 +129,12 @@ export default function LoginPage(){
                                 >
                                     {success
                                     ? "A confirmation email has been sent. Please check your inbox to complete your registration."
-                                    : error}
+                                    : isNotEmailConfirmed ? (
+                                        <span>
+                                            To resend confirmation link:{" "}
+                                            <Button onClick={()=>resendConfirmation(form.getValues())} variant="link" className="underline text-destructive-foreground pl-0">Click Here</Button>
+                                        </span>
+                                    ) : error}
                                 </AlertDescription>
                             </Alert>
                         </motion.div>
