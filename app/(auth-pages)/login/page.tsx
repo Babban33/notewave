@@ -13,6 +13,7 @@ import Link from "next/link"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { useRouter } from "next/navigation"
 
 const formSchema = z.object({
     email: z
@@ -27,8 +28,9 @@ const formSchema = z.object({
 })
 
 export default function LoginPage(){
+    const router = useRouter();
     const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState(false);
+    const [success, setSuccess] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [isNotEmailConfirmed, setIsNotEmailConfirmed] = useState(false);
@@ -52,9 +54,10 @@ export default function LoginPage(){
                 setError(result.error)
             }
             if(result?.success){
-                setSuccess(true);
+                setSuccess(result.success);
                 setError(null);
                 form.reset();
+                router.push("/protected")
             }
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           } catch (error) {
@@ -69,7 +72,7 @@ export default function LoginPage(){
             console.log("started in component");
             const result = await resendEmail(values.email);
             if(result?.success){
-                setSuccess(true);
+                setSuccess(result.success);
                 setError(null);
             } else if(result?.error){
                 console.error(error);
@@ -80,7 +83,7 @@ export default function LoginPage(){
     }
 
     const closeAlert = () => {
-        setSuccess(false)
+        setSuccess(null)
         setError(null)
     }
 
@@ -118,7 +121,7 @@ export default function LoginPage(){
                                         : "text-destructive-foreground"
                                     }`}
                                 >
-                                    {success ? "Registration Successful!" : (isNotEmailConfirmed ? "Email Not Confirmed": "Registration Error")}
+                                    {success ? (success==="Email Sent" ? success: "Logged in Successfully") : (isNotEmailConfirmed ? "Email Not Confirmed": "Registration Error")}
                                 </AlertTitle>
                                 <AlertDescription
                                     className={`mt-1 text-sm ${
@@ -128,7 +131,7 @@ export default function LoginPage(){
                                     }`}
                                 >
                                     {success
-                                    ? "A confirmation email has been sent. Please check your inbox to complete your registration."
+                                    ? (success === "Email sent" ? "A confirmation email has been sent. Please check your inbox to complete your registration." : "Welcome to Notewave")
                                     : isNotEmailConfirmed ? (
                                         <span>
                                             To resend confirmation link:{" "}

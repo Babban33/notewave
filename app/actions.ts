@@ -85,7 +85,7 @@ export const resendEmail = async( email: string ) => {
         if(error){
             return{error: error.message}
         }
-        return {success: "Successfull"};
+        return {success: "Email Sent"};
     } catch(err){
         console.error(err);
         throw new Error("Server Error");
