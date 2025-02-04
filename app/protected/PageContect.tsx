@@ -7,12 +7,12 @@ import { Plus, Search } from "lucide-react";
 
 export default function PageContent({ user }: { user: { email?: string } }) {
     const notes = [
-        { id: 1, title: "Meeting Notes", content: "Discuss project timeline", date: "2024-02-04", color: "bg-blue-100 dark:bg-blue-900" },
-        { id: 2, title: "Shopping List", content: "Milk, eggs, bread", date: "2024-02-03", color: "bg-green-100 dark:bg-green-900" },
-        { id: 3, title: "Ideas", content: "New app features", date: "2024-02-02", color: "bg-yellow-100 dark:bg-yellow-900" },
-        { id: 4, title: "To-Do", content: "Call dentist, pay bills", date: "2024-02-01", color: "bg-pink-100 dark:bg-pink-900" },
-        { id: 5, title: "Recipes", content: "Grandma's apple pie", date: "2024-01-31", color: "bg-purple-100 dark:bg-purple-900" },
-        { id: 6, title: "Quotes", content: "Stay hungry, stay foolish", date: "2024-01-30", color: "bg-orange-100 dark:bg-orange-900" },
+        { id: 1, title: "Meeting Notes", content: "Discuss project timeline", date: "2024-02-04", color: "bg-blue-100 dark:bg-blue-500" },
+        { id: 2, title: "Shopping List", content: "Milk, eggs, bread", date: "2024-02-03", color: "bg-green-100 dark:bg-green-500" },
+        { id: 3, title: "Ideas", content: "New app features", date: "2024-02-02", color: "bg-yellow-100 dark:bg-yellow-500" },
+        { id: 4, title: "To-Do", content: "Call dentist, pay bills", date: "2024-02-01", color: "bg-pink-100 dark:bg-pink-500" },
+        { id: 5, title: "Recipes", content: "Grandma's apple pie", date: "2024-01-31", color: "bg-purple-100 dark:bg-purple-500" },
+        { id: 6, title: "Quotes", content: "Stay hungry, stay foolish", date: "2024-01-30", color: "bg-orange-100 dark:b-orange-500" },
     ]
     return (
         <div className="container mx-auto px-4 py-8">
@@ -20,7 +20,7 @@ export default function PageContent({ user }: { user: { email?: string } }) {
             <div className="flex items-center mb-8">
                 <Input type="text" placeholder="Search notes..." className="flex-grow mr-2" />
                 <Button size="icon">
-                <Search className="h-4 w-4" />
+                    <Search className="h-4 w-4" />
                 </Button>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
