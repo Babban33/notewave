@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { MoonIcon, SunIcon, MenuIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
@@ -61,7 +61,7 @@ export default function Navbar() {
                                     <AvatarImage src={session.user.user_metadata?.avatar_url || ""} alt="User Avatar" />
                                     <AvatarFallback>{session.user.email?.charAt(0).toUpperCase()}</AvatarFallback>
                                 </Avatar>
-                                <Button onClick={signout} className="hidden md:visible">
+                                <Button onClick={signout} className="">
                                     Sign Out
                                 </Button>
                             </div>
@@ -76,36 +76,32 @@ export default function Navbar() {
                             </div>
                         )}
                         
-                        <Sheet>
-                            <SheetTrigger asChild>
-                                <Button variant="ghost" size="icon" className="sm:hidden rounded-full">
-                                    <MenuIcon className="h-5 w-5" />
-                                    <span className="sr-only">Toggle menu</span>
-                                </Button>
-                            </SheetTrigger>
-                            <SheetContent side="right">
-                                <nav className="flex flex-col mt-4 space-y-4">
-                                    {session ? (
-                                        <Button variant="destructive" onClick={signout} className="w-full">
-                                        S   ign Out
-                                        </Button>
-                                    ) : (
-                                        <>
-                                            <Link href="/login">
-                                                <Button variant="ghost" className="w-full">
-                                                    Login
-                                                </Button>
-                                            </Link>
-                                            <Link href="/register">
-                                                <Button variant="default" className="w-full">
-                                                    Register
-                                                </Button>
-                                            </Link>
-                                        </>
-                                    )}
-                                </nav>
-                            </SheetContent>
-                        </Sheet>
+                        {!session && (
+                            <Sheet>
+                                <SheetTrigger asChild>
+                                    <Button variant="ghost" size="icon" className="sm:hidden rounded-full">
+                                        <MenuIcon className="h-5 w-5" />
+                                        <span className="sr-only">Toggle menu</span>
+                                    </Button>
+                                </SheetTrigger>
+                                <SheetContent side="right">
+                                    <SheetTitle>Notewave</SheetTitle>
+                                    <SheetDescription className="sr-only">Navigation Menu</SheetDescription>
+                                    <nav className="flex flex-col mt-4 space-y-4">
+                                        <Link href="/login">
+                                            <Button variant="ghost" className="w-full">
+                                                Login
+                                            </Button>
+                                        </Link>
+                                        <Link href="/register">
+                                            <Button variant="default" className="w-full">
+                                                Register
+                                            </Button>
+                                        </Link>
+                                    </nav>
+                                </SheetContent>
+                            </Sheet>
+                        )}
                     </div>
                 </div>
             </div>
