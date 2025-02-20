@@ -15,7 +15,7 @@ export default function PageContent({ user }: { user: { email?: string } }) {
         { id: 6, title: "Quotes", content: "Stay hungry, stay foolish", date: "2024-01-30", color: "bg-orange-100 dark:b-orange-500" },
     ]
     return (
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8 max-w-screen-xl">
             <h1 className="text-3xl font-bold mb-8">{user.email} Notes</h1>
             <div className="flex items-center mb-8">
                 <Input type="text" placeholder="Search notes..." className="flex-grow mr-2" />

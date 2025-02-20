@@ -10,6 +10,7 @@ import { createClient } from "@/utils/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Session } from "@supabase/supabase-js";
 import { signout } from "@/app/actions";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 
 export default function Navbar() {
     const { theme, setTheme } = useTheme();
@@ -57,13 +58,19 @@ export default function Navbar() {
 
                         {session ? (
                             <div className="flex items-center space-x-4">
-                                <Avatar>
-                                    <AvatarImage src={session.user.user_metadata?.avatar_url || ""} alt="User Avatar" />
-                                    <AvatarFallback>{session.user.email?.charAt(0).toUpperCase()}</AvatarFallback>
-                                </Avatar>
-                                <Button onClick={signout} className="">
-                                    Sign Out
-                                </Button>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Avatar className="cursor-pointer">
+                                            <AvatarImage src={session.user.user_metadata?.avatar_url || ""} alt="User Avatar" />
+                                            <AvatarFallback>{session.user.email?.charAt(0).toUpperCase()}</AvatarFallback>
+                                        </Avatar>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        <DropdownMenuItem onClick={signout} className="text-center items-center justify-center cursor-pointer">
+                                            Sign Out
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
                             </div>
                         ) : (
                             <div className="hidden sm:flex space-x-4">
