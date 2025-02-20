@@ -10,7 +10,7 @@ import { createClient } from "@/utils/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Session } from "@supabase/supabase-js";
 import { signout } from "@/app/actions";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu";
 
 export default function Navbar() {
     const { theme, setTheme } = useTheme();
@@ -66,6 +66,8 @@ export default function Navbar() {
                                         </Avatar>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent>
+                                        <DropdownMenuLabel className="justify-center text-center">{session.user.user_metadata.display_name}</DropdownMenuLabel>
+                                        <DropdownMenuSeparator />
                                         <DropdownMenuItem onClick={signout} className="text-center items-center justify-center cursor-pointer">
                                             Sign Out
                                         </DropdownMenuItem>
