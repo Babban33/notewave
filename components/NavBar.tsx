@@ -65,7 +65,7 @@ export default function Navbar() {
                                             <AvatarFallback>{session.user.email?.charAt(0).toUpperCase()}</AvatarFallback>
                                         </Avatar>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent>
+                                    <DropdownMenuContent className="mr-2 md:mr-0">
                                         <DropdownMenuLabel className="justify-center text-center">{session.user.user_metadata.display_name}</DropdownMenuLabel>
                                         <DropdownMenuSeparator />
                                         <DropdownMenuItem onClick={signout} className="text-center items-center justify-center cursor-pointer">
