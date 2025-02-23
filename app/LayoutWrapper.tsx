@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const shouldHideNavbarAndFooter = pathname === "/protected/new";
+  const shouldHideNavbarAndFooter = pathname.startsWith("/protected/") && pathname !== "/protected";
 
   return (
     <div className="flex flex-col min-h-screen">
