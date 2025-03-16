@@ -1,6 +1,6 @@
 "use client";
 import { createClient } from "@/utils/supabase/client";
-import { ChevronLeft, Copy, Heart, MoonIcon, SunIcon, Trash } from "lucide-react";
+import { ChevronLeft, MoonIcon, SunIcon, Trash2 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -28,17 +28,22 @@ function useDebounce(callback: () => Promise<void>, wait: number) {
     return debouncedFunction;
 }
 
-const Navbar = ({ onDelete }: { onDelete: () => void }) => {
+const Navbar = ({ onDelete, setIsNavigating }: { onDelete: () => void, setIsNavigating: (value: boolean) => void }) => {
     const { theme, setTheme } = useTheme();
     const router = useRouter();
+    const backButtonClick = () =>{
+        setIsNavigating(true);
+        router.push("/protected")
+    }
+
     return (
         <div className="fixed top-0 left-0 right-0 flex flex-row justify-between items-center px-4 py-4 bg-white dark:bg-black z-10">
-            <button onClick={() => router.push("/protected")}>
+            <button onClick={backButtonClick}>
                 <ChevronLeft className="h-6 w-6" />
             </button>
             <div className="flex flex-row justify-center items-center space-x-4">
-                <Heart className="h-4 w-4" />
-                <Copy className="h-4 w-4" />
+                {/* <Heart className="h-4 w-4" /> */}
+                {/* <Copy className="h-4 w-4" /> */}
                 <button
                     aria-label="Toggle theme"
                     onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
@@ -55,7 +60,7 @@ const Navbar = ({ onDelete }: { onDelete: () => void }) => {
                     onClick={onDelete}
                     className="p-0 bg-transparent border-none cursor-pointer text-red-500 hover:text-red-700"
                 >
-                    <Trash className="h-4 w-4" />
+                    <Trash2 className="h-4 w-4" />
                 </button>
             </div>
         </div>
@@ -73,6 +78,7 @@ export default function EditNote({
 }) {
     const [title, setTitle] = useState(initialTitle);
     const [content, setContent] = useState(initialContent);
+    const [isNavigating, setIsNavigating] = useState(false);
     const router = useRouter();
     const supabase = createClient();
 
@@ -94,6 +100,7 @@ export default function EditNote({
     }, [title, content, debouncedSaveNote]);
 
     const deleteNote = async () => {
+        setIsNavigating(true);
         const { error } = await supabase
             .from("notes")
             .delete()
@@ -108,7 +115,7 @@ export default function EditNote({
 
     return (
         <div className="flex flex-col h-screen">
-            <Navbar onDelete={deleteNote} />
+            <Navbar onDelete={deleteNote} setIsNavigating={setIsNavigating} />
             <div className="flex-1 w-full px-4 py-4 mt-12 bg-white dark:bg-black text-black dark:text-white">
                 <input
                     className="w-full text-xl font-bold outline-none bg-transparent mb-4"
@@ -124,6 +131,11 @@ export default function EditNote({
                     onChange={(e) => setContent(e.target.value)}
                 />
             </div>
+            {isNavigating && (
+                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                    <div className="w-16 h-16 border-4 border-gray-300 border-t-transparent rounded-full animate-spin"></div>
+                </div>
+            )}
         </div>
     );
 }

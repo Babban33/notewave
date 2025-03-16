@@ -32,8 +32,9 @@ export default function PageContent({
 }) {
     const router = useRouter();
     const [searchQuery, setSearchQuery] = useState("");
-    const [isCreating, setIsCreating] = useState(false); // Loading state
+    const [isCreating, setIsCreating] = useState(false);
     const [isDeleting, setIsDeleting] = useState<string | null>(null);
+    const [isNavigating, setIsNavigating] = useState(false);
     const supabase = createClient();
 
     const filteredNotes = initialNotes.filter(
@@ -66,6 +67,7 @@ export default function PageContent({
     };
 
     const handleNoteClick = (noteId: string) => {
+        setIsNavigating(true);
         router.push(`/protected/${noteId}`);
     };
 
@@ -175,6 +177,11 @@ export default function PageContent({
                     </Card>
                 ))}
             </div>
+            {isNavigating && (
+                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                    <div className="w-16 h-16 border-4 border-gray-300 border-t-transparent rounded-full animate-spin"></div>
+                </div>
+            )}
         </div>
     );
 }
