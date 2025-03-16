@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createClient } from "@/utils/supabase/client"; // Client-side Supabase
@@ -32,6 +32,7 @@ export default function PageContent({
     const router = useRouter();
     const [searchQuery, setSearchQuery] = useState("");
     const [isCreating, setIsCreating] = useState(false); // Loading state
+    const [isDeleting, setIsDeleting] = useState<string | null>(null);
     const supabase = createClient();
 
     const filteredNotes = initialNotes.filter(
@@ -60,8 +61,6 @@ export default function PageContent({
             alert("Failed to create note. Please try again.");
             return;
         }
-
-        // Redirect to the new note's editing page
         router.push(`/protected/${newNote.id}`);
     };
 
@@ -69,9 +68,29 @@ export default function PageContent({
         router.push(`/protected/${noteId}`);
     };
 
+    const handleDeleteNote = async (noteId: string, e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (isDeleting) return;
+
+        setIsDeleting(noteId);
+        const { error: deleteError } = await supabase
+            .from("notes")
+            .delete()
+            .eq("id", noteId)
+            .eq("user_id", user.id);
+
+        setIsDeleting(null);
+        if (deleteError) {
+            console.error("Error deleting note:", deleteError);
+            alert("Failed to delete note. Please try again.");
+            return;
+        }
+        router.refresh();
+    };
+
     return (
-        <div className="container mx-auto px-4 py-8 max-w-screen-xl">
-            <h1 className="text-3xl font-bold mb-8">
+        <div className="container mx-auto px-2 md:px-8 py-4 max-w-screen-xl min-h-svh">
+            <h1 className="text-3xl font-bold md:mb-8 mb-4">
                 {user.name?.charAt(0).toUpperCase() || "User"}&apos;s Notes
             </h1>
 
@@ -119,7 +138,7 @@ export default function PageContent({
                     <Card
                         key={note.id}
                         onClick={() => handleNoteClick(note.id)}
-                        className="transition-transform duration-200 hover:scale-105 cursor-pointer"
+                        className="relative transition-transform duration-200 hover:scale-105 cursor-pointer"
                     >
                         <CardHeader>
                             <CardTitle>{note.title}</CardTitle>
@@ -130,6 +149,19 @@ export default function PageContent({
                                 {new Date(note.created_at).toLocaleDateString()}
                             </p>
                         </CardContent>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="absolute top-2 right-2 opacity-100"
+                            onClick={(e) => handleDeleteNote(note.id, e)}
+                            disabled={isDeleting === note.id}
+                        >
+                            {isDeleting === note.id ? (
+                                <span className="animate-spin h-4 w-4 border-2 border-t-transparent rounded-full" />
+                            ) : (
+                                <Trash2 className="h-4 w-4 text-red-500 hover:text-red-700" />
+                            )}
+                        </Button>
                     </Card>
                 ))}
             </div>
