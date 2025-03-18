@@ -69,7 +69,8 @@ const EditorToolbar = ({ onFormat, activeFormats }: {
     activeFormats: { [key: string]: boolean }
 }) => {
     return (
-        <Card className="fixed bottom-2 left-1/2 transform -translate-x-1/2 inline-flex items-center gap-2 px-4 py-3 z-10">            {/* Text Style Dropdown */}
+        <Card className="fixed bottom-2 left-1/2 transform -translate-x-1/2 inline-flex items-center gap-2 px-4 py-3 z-10">
+            {/* Text Style Dropdown */}
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="p-2" title="Text Style">
@@ -237,6 +238,13 @@ export default function EditNote({
     };
 
     const toggleFormat = (type: string, value?: string) => {
+        if (contentRef.current) {
+            contentRef.current.focus();
+        } else {
+            console.warn("Editor reference is not available.");
+            return;
+        }
+
         const isStyleFormat = ['bold', 'italic', 'underline'].includes(type);
         const isAlignment = ['justifyLeft', 'justifyCenter', 'justifyRight'].includes(type);
         const isList = ['insertUnorderedList', 'insertOrderedList'].includes(type);
@@ -256,11 +264,12 @@ export default function EditNote({
                 insertOrderedList: false,
             }));
         } else if (isList) {
+            const isCurrentlyActive = activeFormats[type];
             document.execCommand(type, false, undefined);
             setActiveFormats(prev => ({
                 ...prev,
-                insertUnorderedList: type === 'insertUnorderedList' && !prev.insertUnorderedList,
-                insertOrderedList: type === 'insertOrderedList' && !prev.insertOrderedList,
+                insertUnorderedList: type === 'insertUnorderedList' && !isCurrentlyActive,
+                insertOrderedList: type === 'insertOrderedList' && !isCurrentlyActive,
                 justifyLeft: false,
                 justifyCenter: false,
                 justifyRight: false,
@@ -274,7 +283,8 @@ export default function EditNote({
             setContent(newContent);
             debouncedSaveNote();
         }
-        contentRef.current?.focus();
+
+        updateActiveFormats();
     };
 
     const handleInput = () => {
@@ -292,12 +302,69 @@ export default function EditNote({
         }
     };
 
+    // New useEffect for nesting and exiting lists
+    useEffect(() => {
+        let lastKeyWasEnter = false;
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Tab' && contentRef.current) {
+                e.preventDefault();
+                if (e.shiftKey) {
+                    document.execCommand('outdent', false, undefined);
+                } else {
+                    document.execCommand('indent', false, undefined);
+                }
+                updateActiveFormats();
+            } else if (e.key === 'Enter') {
+                const selection = window.getSelection();
+                if (selection && selection.rangeCount > 0) {
+                    const range = selection.getRangeAt(0);
+                    const currentNode = range.startContainer;
+                    if (currentNode.nodeType === Node.TEXT_NODE && currentNode.textContent?.trim() === '') {
+                        if (lastKeyWasEnter) {
+                            e.preventDefault();
+                            document.execCommand('insertParagraph', false, undefined);
+                            lastKeyWasEnter = false;
+                        } else {
+                            lastKeyWasEnter = true;
+                        }
+                    } else {
+                        lastKeyWasEnter = false;
+                    }
+                }
+            } else if (e.key === 'Backspace') {
+                const selection = window.getSelection();
+                if (selection && selection.rangeCount > 0) {
+                    const range = selection.getRangeAt(0);
+                    const currentNode = range.startContainer;
+                    if (currentNode.nodeType === Node.TEXT_NODE && 
+                        currentNode.textContent?.trim() === '' && 
+                        currentNode.parentElement?.tagName === 'LI') {
+                        e.preventDefault();
+                        document.execCommand('outdent', false, undefined);
+                    }
+                }
+            }
+        };
+
+        const editor = contentRef.current;
+        if (editor) {
+            editor.addEventListener('keydown', handleKeyDown);
+        }
+
+        return () => {
+            if (editor) {
+                editor.removeEventListener('keydown', handleKeyDown);
+            }
+        };
+    }, [contentRef]);
+
     useEffect(() => {
         document.addEventListener('selectionchange', handleSelectionChange);
         return () => {
             document.removeEventListener('selectionchange', handleSelectionChange);
         };
-    });
+    },);
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -319,7 +386,7 @@ export default function EditNote({
                 <div
                     ref={contentRef}
                     contentEditable
-                    className="flex-1 w-full outline-none min-h-screen bg-transparent text-black dark:text-white editor-content"
+                    className="flex-1 w-full outline-none min-h-[calc(100vh-8rem)] bg-transparent text-black dark:text-white editor-content"
                     onInput={handleInput}
                 />
             </div>
@@ -332,6 +399,21 @@ export default function EditNote({
                     <div className="w-16 h-16 border-4 border-gray-300 border-t-transparent rounded-full animate-spin"></div>
                 </div>
             )}
+            <style jsx global>{`
+                .editor-content ul {
+                    list-style-type: disc !important;
+                    padding-left: 2rem !important;
+                    margin: 0.5rem 0 !important;
+                }
+                .editor-content ol {
+                    list-style-type: decimal !important;
+                    padding-left: 2rem !important;
+                    margin: 0.5rem 0 !important;
+                }
+                .editor-content li {
+                    margin: 0.25rem 0 !important;
+                }
+            `}</style>
         </div>
     );
 }
