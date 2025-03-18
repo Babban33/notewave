@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Plus, Search, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { createClient } from "@/utils/supabase/client"; // Client-side Supabase
+import { useEffect, useState } from "react";
+import { createClient } from "@/utils/supabase/client";
 
 interface User {
     id: string;
@@ -35,9 +35,42 @@ export default function PageContent({
     const [isCreating, setIsCreating] = useState(false);
     const [isDeleting, setIsDeleting] = useState<string | null>(null);
     const [isNavigating, setIsNavigating] = useState(false);
+    const [notes, setNotes] = useState<Note[]>(initialNotes);
     const supabase = createClient();
 
-    const filteredNotes = initialNotes.filter(
+    useEffect(() => {
+        const supabase = createClient();
+    
+        const channel = supabase
+            .channel(`realtime-notes-${user.id}`)
+            .on(
+                "postgres_changes",
+                { event: "*", schema: "public", table: "notes", filter: `user_id=eq.${user.id}` },
+                (payload) => {
+                    console.log("Realtime event received:", payload);
+    
+                    setNotes((prev) => {
+                        if (payload.eventType === "INSERT") {
+                            return [payload.new as Note, ...prev];
+                        }
+                        if (payload.eventType === "UPDATE") {
+                            return prev.map((note) => (note.id === payload.new.id ? (payload.new as Note) : note));
+                        }
+                        if (payload.eventType === "DELETE") {
+                            return prev.filter((note) => note.id !== payload.old.id);
+                        }
+                        return prev;
+                    });
+                }
+            )
+            .subscribe();
+    
+        return () => {
+            supabase.removeChannel(channel);
+        };
+    }, [user.id]);      
+
+    const filteredNotes = notes.filter(
         (note) =>
             note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
             note.content.toLowerCase().includes(searchQuery.toLowerCase())
@@ -87,7 +120,7 @@ export default function PageContent({
             alert("Failed to delete note. Please try again.");
             return;
         }
-        router.refresh();
+        setNotes((prev) => prev.filter((note) => note.id !== noteId));
         setIsDeleting(null);
     };
 
