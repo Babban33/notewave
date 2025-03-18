@@ -1,12 +1,9 @@
 "use client";
 import { createClient } from "@/utils/supabase/client";
-import { ChevronLeft, MoonIcon, SunIcon, Trash2, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, List, ListOrdered, CaseSensitive, Type } from "lucide-react";
-import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import NotesNavBar from "@/components/notes/NotesNavBar";
+import EditorToolbar from "@/components/notes/EditorToolBar";
 
 function useDebounce(callback: () => Promise<void>, wait: number) {
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -30,130 +27,6 @@ function useDebounce(callback: () => Promise<void>, wait: number) {
 
     return debouncedFunction;
 }
-
-const Navbar = ({ onDelete, setIsNavigating }: { 
-    onDelete: () => void, 
-    setIsNavigating: (value: boolean) => void 
-}) => {
-    const { theme, setTheme } = useTheme();
-    const router = useRouter();
-    
-    const backButtonClick = () => {
-        setIsNavigating(true);
-        router.push("/protected");
-    };
-
-    return (
-        <div className="fixed top-0 left-0 right-0 flex flex-row justify-between items-center px-4 py-4 bg-white dark:bg-black z-10">
-            <button onClick={backButtonClick}>
-                <ChevronLeft className="h-6 w-6" />
-            </button>
-            <div className="flex flex-row justify-center items-center space-x-4">
-                <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
-                    {theme === "light" ? (
-                        <SunIcon className="h-4 w-4" />
-                    ) : (
-                        <MoonIcon className="h-4 w-4" />
-                    )}
-                </button>
-                <button onClick={onDelete} className="text-red-500 hover:text-red-700">
-                    <Trash2 className="h-4 w-4" />
-                </button>
-            </div>
-        </div>
-    );
-};
-
-const EditorToolbar = ({ onFormat, activeFormats }: { 
-    onFormat: (type: string, value?: string) => void,
-    activeFormats: { [key: string]: boolean }
-}) => {
-    return (
-        <Card className="fixed bottom-2 left-1/2 transform -translate-x-1/2 inline-flex items-center gap-2 px-4 py-3 z-10">
-            {/* Text Style Dropdown */}
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="p-2" title="Text Style">
-                        <Type className="h-5 w-5" />
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                    <DropdownMenuItem onClick={() => onFormat('bold')}>
-                        <Bold className="mr-2 h-4 w-4" /> Bold {activeFormats.bold && <span className="ml-2">✓</span>}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onFormat('italic')}>
-                        <Italic className="mr-2 h-4 w-4" /> Italic {activeFormats.italic && <span className="ml-2">✓</span>}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onFormat('underline')}>
-                        <Underline className="mr-2 h-4 w-4" /> Underline {activeFormats.underline && <span className="ml-2">✓</span>}
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
-
-            {/* Alignment Dropdown */}
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="p-2" title="Alignment">
-                        {activeFormats.justifyLeft ? <AlignLeft className="h-5 w-5" /> :
-                         activeFormats.justifyCenter ? <AlignCenter className="h-5 w-5" /> :
-                         activeFormats.justifyRight ? <AlignRight className="h-5 w-5" /> :
-                         <AlignLeft className="h-5 w-5" />}
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                    <DropdownMenuItem onClick={() => onFormat('justifyLeft')}>
-                        <AlignLeft className="mr-2 h-4 w-4" /> Left {activeFormats.justifyLeft && <span className="ml-2">✓</span>}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onFormat('justifyCenter')}>
-                        <AlignCenter className="mr-2 h-4 w-4" /> Center {activeFormats.justifyCenter && <span className="ml-2">✓</span>}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onFormat('justifyRight')}>
-                        <AlignRight className="mr-2 h-4 w-4" /> Right {activeFormats.justifyRight && <span className="ml-2">✓</span>}
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
-
-            {/* List Dropdown */}
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="p-2" title="Lists">
-                        {activeFormats.insertUnorderedList ? <List className="h-5 w-5" /> :
-                         activeFormats.insertOrderedList ? <ListOrdered className="h-5 w-5" /> :
-                         <List className="h-5 w-5" />}
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                    <DropdownMenuItem onClick={() => onFormat('insertUnorderedList')}>
-                        <List className="mr-2 h-4 w-4" /> Bullet List {activeFormats.insertUnorderedList && <span className="ml-2">✓</span>}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onFormat('insertOrderedList')}>
-                        <ListOrdered className="mr-2 h-4 w-4" /> Numbered List {activeFormats.insertOrderedList && <span className="ml-2">✓</span>}
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
-
-            {/* Text Size Dropdown */}
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="p-2" title="Text Size">
-                        <CaseSensitive className="h-5 w-5" />
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                    <DropdownMenuItem onClick={() => onFormat('fontSize', '3')}>
-                        Small
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onFormat('fontSize', '4')}>
-                        Medium
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onFormat('fontSize', '5')}>
-                        Large
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
-        </Card>
-    );
-};
 
 export default function EditNote({
     noteId,
@@ -368,7 +241,7 @@ export default function EditNote({
 
     return (
         <div className="flex flex-col min-h-screen">
-            <Navbar 
+            <NotesNavBar 
                 onDelete={deleteNote} 
                 setIsNavigating={setIsNavigating}
             />
